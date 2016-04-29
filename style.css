@@ -1,0 +1,69 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+a {
+	text-decoration: none;
+}
+
+#main {
+	text-align: center;
+}
+
+h1 {
+	font-size: 36px;
+  	font-size: 5.4vw;
+}
+
+h3 {
+	font-size: 20px;
+  	font-size: 3vw;	
+}
+
+h5{
+	font-size: 12px;
+  	font-size: 1vw;	
+}
+
+h1, h2, h3, h4, h5, h6 {
+	padding: 0;
+	margin: 0;
+}
+
+.hasImage {
+	width: 5vw;
+}
+
+
+.buttonWrapper {
+	width: 600px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.btn {
+	border-radius: 5px;	
+  	color: #fff;
+	font-size: 30px;
+  	font-size: 1.5vw;
+  	position: relative;
+  	display: inline-block;
+  	background-color: #2ecc71;
+}
+
+.btn_big {
+	padding: 20px 30px;
+  	padding: 1vw 1.5vw;
+  	margin: 20px;
+  	margin: 1vw;
+}
+
+.btn_small {
+	padding: 10px 15px;
+  	padding: 0.5vw 0.75vw;
+  	margin: 10px;
+  	margin: 0.5vw;
+}
+
+.btn:hover {
+  	background-color: #48E68B;
+}

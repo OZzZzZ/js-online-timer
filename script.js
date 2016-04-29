@@ -1,29 +1,80 @@
-var timer, minutes, seconds;
-var exercise;
-var cycle;
+var timer, timerDescription, minutes, seconds;
+var exercise, cycle;
 var cycleCount;
 var pauseTime;
 var timeConstants;
+var descriptions;
 var interval;
 var display = document.querySelector('#time');
+var text = document.querySelector('#text');
+var displayCycle = document.querySelector('#cycle');
+var playTimer;
+var nowIsPause;
+var runner = document.querySelector('#runner');
+var editor = document.querySelector('#editor');
+var startStopButton = document.querySelector('#startStopButton');
 
+function activateRunner() {
+    updateTimer();
+    startTimer();
+    runner.style.display = ''
+    editor.style.display = 'none';
+}
+
+function activateEditor() {
+    stopTimer();
+    runner.style.display = 'none'
+    editor.style.display = '';
+}
+
+function startStopTimer() {
+    if (playTimer) stopTimer();
+    else startTimer();
+}
 
 function startTimer() {
+    playTimer = true;
     interval = setInterval(displayTime, 1000);
+    startStopButton.text = 'Stop';
 }
 
 function stopTimer() {
+    playTimer = false;
     if (interval != null) clearInterval(interval);
+    startStopButton.text = 'Start';
 }
 
 function updateTimer() {
     updateSettings();
-    exercise = 0;
-    timer = timeConstants[exercise];
+    resetAll();
 }
 
 function displayTime() {
-    
+    if (timer < 0) {
+        if (!nowIsPause) {
+            makePause();
+        } else {
+            nowIsPause = false;
+
+            if (++exercise < timeConstants.length) {
+                resetExercise(exercise);
+            } else {
+                if (++cycle <= cycleCount) {
+                    resetCycle();        
+                } else {
+                    resetAll();
+                    stopTimer();
+                }
+            }
+        }
+    }
+
+    updateTime();
+
+    timer--;
+}
+
+function updateTime() {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -31,60 +82,74 @@ function displayTime() {
     seconds = seconds < 10 ? "0" + seconds : seconds;
 
     display.textContent = minutes + ":" + seconds;
-    timer--;
-    
-    if (timer < 0) {
-        if (++exercise < timeConstants.length) {
-            console.log(exercise);
-            console.log(timeConstants.length);
-            timer = timeConstants[exercise];
-        } else {
-            if (++cycle <= cycleCount) {
-                resetCycle();        
-            } else {
-                resetAll();
-                stopTimer();
-            }
-        }
-    }
-
 }
 
 function resetAll() {
-    resetCycle();
     cycle = 1;
+    nowIsPause = false;
+    resetCycle();
+    updateTime();
 }
 
 function resetCycle() {
     exercise = 0;
-    timer = timeConstants[exercise]; 
+    updateCycleText(cycle);
+    resetExercise(exercise);
 }
+
+function updateCycleText(cycleText) {
+    displayCycle.textContent = "Cycle " + cycleText;
+}
+
+function resetExercise(exerciseNumber) {
+    timer = timeConstants[exerciseNumber];
+    timerDescription = descriptions[exerciseNumber];
+    updateText(descriptions[exerciseNumber]);
+}
+
+function updateText(selectedText) {
+    text.textContent = selectedText;
+}
+
+function makePause() {
+    nowIsPause = true;
+    timer = pauseTime;
+    if (pauseTime == 0) return;
+    updateText("Make pause, bro");
+}
+
 
 function updateSettings() {
     var pauseValue = document.querySelector('#pauseTime');
-    console.log(pauseValue.valueAsNumber);
     pauseTime = pauseValue.valueAsNumber;
 
     var cycleValue = document.querySelector('#cycleCount');
-    console.log(cycleValue.valueAsNumber);
     cycleCount = cycleValue.valueAsNumber;
 
     timeConstants = [];
+    descriptions = [];
     var container = document.getElementById("fieldsContainer");
     var times = container.getElementsByClassName("exerciseTime");
     for (var i = 0; i < times.length; i++) {
         timeConstants.push(times[i].valueAsNumber);
     }
 
-    console.log(timeConstants);
+    var timesDesc = container.getElementsByClassName("exerciseDescription");
+    for (var i = 0; i < timesDesc.length; i++) {
+        descriptions.push(timesDesc[i].value);
+    }
 }
 
 window.onload = function () {
+    playTimer = false;
+
     addField();
     
     updateSettings();
 
     resetAll();
+
+    activateEditor();
 }
 
 function addField() {
@@ -97,7 +162,7 @@ function addField() {
     var input = document.createElement("input");
     input.type = "text";
     input.value = "Exercise " + size;
-    input.id = "exerciseDescription"
+    input.className = "exerciseDescription"
     div.appendChild(input);
     
     var input = document.createElement("input");
