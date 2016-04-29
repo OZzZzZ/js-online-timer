@@ -2,14 +2,31 @@
 <html>
 <body>
 
-<div>Registration closes in <span id="time"></span> minutes!</div>
+<div>Registration closes in <span id="time">00:00</span> minutes!</div>
 
-<!-- <button onclick="setState(start);">Start</button> -->
-<button onclick="startTimer();">Start</button>
+<form>
+  Cycles:
+  <input type="number" id="cycleCount" name="quantity" min="1" max="65532" value="1">
+</form>
 
-<button onclick="stopTimer();">Stop</button>
+<form>
+  Pause time (in seconds):
+  <input type="number" id="pauseTime" name="quantity" min="0" max="65532" value="15">
+</form>
 
-<button onclick="resetTimer();">Reset</button>
+<button onclick="startTimer()">Start</button>
+
+<button onclick="stopTimer()">Stop</button>
+
+<button onclick="updateTimer()">Update / Reset</button>
+
+<a href="#" onclick="addField()">Add Field</a>
+<a href="#" onclick="removeField()">Remove Field</a>
+<div id="fieldsContainer">
+	<!-- <div class="exercise">
+		1:<input id="exerciseDescription" type="text"><input id="exerciseTime" type="number" min="1" max="65532" value="15">
+	</div> -->
+</div>
 
 <script type="text/javascript" src="script.js"></script>
 </body>
